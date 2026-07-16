@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: mga-card
+    env: static
+    staticPublishPath: ./
+    pullRequestPreviewsEnabled: true
