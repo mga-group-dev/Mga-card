@@ -164,38 +164,3 @@ if (heroEl && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     if (heroPanelEl) heroPanelEl.style.transform = '';
   });
 }
-
-// Custom cursor: dot + lagging ring, expands over interactive elements
-const cursorDot = document.getElementById('cursorDot');
-const cursorRing = document.getElementById('cursorRing');
-
-if (cursorDot && cursorRing && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-  let ringX = window.innerWidth / 2;
-  let ringY = window.innerHeight / 2;
-  let targetX = ringX;
-  let targetY = ringY;
-
-  document.addEventListener(
-    'mousemove',
-    (event) => {
-      targetX = event.clientX;
-      targetY = event.clientY;
-      cursorDot.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) translate(-50%, -50%)`;
-    },
-    { passive: true }
-  );
-
-  const animateRing = () => {
-    ringX += (targetX - ringX) * 0.18;
-    ringY += (targetY - ringY) * 0.18;
-    cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
-    requestAnimationFrame(animateRing);
-  };
-  requestAnimationFrame(animateRing);
-
-  const hoverTargets = 'a, button, .service-card, .social-pill, .contact-pill';
-  document.querySelectorAll(hoverTargets).forEach((el) => {
-    el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
-    el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
-  });
-}
