@@ -347,9 +347,9 @@ h2 {
 }
 
 .highlight-card.glow {
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.35), rgba(242, 200, 106, 0.28));
-  border-color: rgba(242, 200, 106, 0.55);
-  box-shadow: var(--glow);
+  background: var(--panel);
+  border-color: var(--border);
+  box-shadow: var(--shadow);
 }
 
 .highlight-card strong {
@@ -671,9 +671,9 @@ h2 {
 }
 
 .service-card.featured {
-  background: linear-gradient(135deg, rgba(212, 175, 55, 0.28), rgba(242, 200, 106, 0.18));
-  border-color: rgba(242, 200, 106, 0.4);
-  box-shadow: var(--glow);
+  background: var(--panel);
+  border-color: var(--border);
+  box-shadow: var(--shadow);
 }
 
 .service-card ul {
