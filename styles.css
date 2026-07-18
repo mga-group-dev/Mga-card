@@ -151,14 +151,15 @@ img {
 .nav-links a::after {
   content: '';
   position: absolute;
-  left: 50%;
+  left: 0;
+  right: 0;
   bottom: -2px;
-  width: 0;
   height: 2px;
   border-radius: 999px;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  transform: translateX(-50%);
-  transition: width 0.3s ease;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 0.3s ease;
 }
 
 .nav-links a:hover {
@@ -166,7 +167,7 @@ img {
 }
 
 .nav-links a:hover::after {
-  width: 100%;
+  transform: scaleX(1);
 }
 
 .menu-toggle {
@@ -304,11 +305,12 @@ h2 {
 .contact-card {
   background: var(--panel);
   border: 1px solid var(--border);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
   border-radius: 1.25rem;
   box-shadow: var(--shadow);
   transition: transform 0.3s ease, border-color 0.3s ease;
+  transform: translateZ(0);
 }
 
 .highlight-card:hover,
@@ -1086,21 +1088,21 @@ h2 {
 
 .hero-mesh {
   position: absolute;
-  inset: 0;
+  inset: -10%;
   z-index: -1;
   pointer-events: none;
   background:
     radial-gradient(600px circle at 20% 20%, rgba(212, 175, 55, 0.16), transparent 60%),
     radial-gradient(500px circle at 80% 30%, rgba(242, 200, 106, 0.14), transparent 55%),
     radial-gradient(700px circle at 50% 90%, rgba(212, 175, 55, 0.1), transparent 60%);
-  background-size: 160% 160%;
-  animation: mesh-drift 22s ease-in-out infinite alternate;
-  will-change: background-position;
+  animation: mesh-drift 24s ease-in-out infinite alternate;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 @keyframes mesh-drift {
-  0% { background-position: 0% 0%, 100% 0%, 50% 100%; }
-  100% { background-position: 20% 15%, 80% 20%, 45% 85%; }
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(-3%, -2%, 0) scale(1.06); }
 }
 
 .hero-cursor-glow {
@@ -1111,9 +1113,9 @@ h2 {
   border-radius: 50%;
   pointer-events: none;
   background: radial-gradient(circle, rgba(242, 200, 106, 0.16), transparent 70%);
-  transform: translate(-50%, -50%);
   left: var(--gx, 50%);
   top: var(--gy, 30%);
+  transform: translate(-50%, -50%);
   transition: opacity 0.4s ease;
   opacity: 0;
 }
@@ -1130,6 +1132,10 @@ h2 {
   pointer-events: none;
 }
 
+.hero-particles {
+  contain: strict;
+}
+
 .hero-particle {
   position: absolute;
   bottom: -20px;
@@ -1140,6 +1146,7 @@ h2 {
   opacity: 0.7;
   animation: particle-float var(--duration, 14s) linear infinite;
   animation-delay: var(--delay, 0s);
+  will-change: transform, opacity;
 }
 
 @keyframes particle-float {
@@ -1322,13 +1329,14 @@ h2 {
   content: '';
   position: absolute;
   top: 0;
-  left: -60%;
+  left: -20%;
   width: 40%;
   height: 100%;
   background: linear-gradient(115deg, transparent, rgba(255, 240, 210, 0.18), transparent);
-  transform: skewX(-20deg);
-  transition: left 0.9s ease;
+  transform: skewX(-20deg) translateX(-150%);
+  transition: transform 0.9s ease;
   pointer-events: none;
+  will-change: transform;
 }
 
 .highlight-card:hover::after,
@@ -1340,7 +1348,7 @@ h2 {
 .dm-card:hover::after,
 .contact-card:hover::after,
 .service-card:hover::after {
-  left: 130%;
+  transform: skewX(-20deg) translateX(475%);
 }
 
 /* ============================

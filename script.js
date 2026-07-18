@@ -92,7 +92,7 @@ counters.forEach((counter) => counterObserver.observe(counter));
 // Floating hero particles
 const particleField = document.getElementById('heroParticles');
 if (particleField) {
-  const particleCount = window.innerWidth < 720 ? 90 : 180;
+  const particleCount = window.innerWidth < 720 ? 45 : 90;
   for (let i = 0; i < particleCount; i += 1) {
     const particle = document.createElement('span');
     particle.className = 'hero-particle';
@@ -113,10 +113,23 @@ const heroContentEl = heroEl ? heroEl.querySelector('.hero-content') : null;
 const heroPanelEl = heroEl ? heroEl.querySelector('.hero-panel') : null;
 
 if (heroEl && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-  heroEl.addEventListener('mousemove', (event) => {
-    const rect = heroEl.getBoundingClientRect();
-    const x = (event.clientX - rect.left) / rect.width;
-    const y = (event.clientY - rect.top) / rect.height;
+  let heroRect = heroEl.getBoundingClientRect();
+  let pendingEvent = null;
+  let ticking = false;
+
+  const refreshHeroRect = () => {
+    heroRect = heroEl.getBoundingClientRect();
+  };
+  window.addEventListener('resize', refreshHeroRect, { passive: true });
+
+  const applyParallax = () => {
+    ticking = false;
+    if (!pendingEvent) return;
+    const { clientX, clientY } = pendingEvent;
+    pendingEvent = null;
+
+    const x = (clientX - heroRect.left) / heroRect.width;
+    const y = (clientY - heroRect.top) / heroRect.height;
     const offsetX = (x - 0.5) * 2;
     const offsetY = (y - 0.5) * 2;
 
@@ -126,13 +139,25 @@ if (heroEl && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
     }
 
     if (heroContentEl) {
-      heroContentEl.style.transform = `translate(${offsetX * 3}px, ${offsetY * 3}px)`;
+      heroContentEl.style.transform = `translate3d(${offsetX * 3}px, ${offsetY * 3}px, 0)`;
     }
 
     if (heroPanelEl) {
-      heroPanelEl.style.transform = `translate(${offsetX * 5}px, ${offsetY * 5}px)`;
+      heroPanelEl.style.transform = `translate3d(${offsetX * 5}px, ${offsetY * 5}px, 0)`;
     }
-  });
+  };
+
+  heroEl.addEventListener(
+    'mousemove',
+    (event) => {
+      pendingEvent = event;
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(applyParallax);
+      }
+    },
+    { passive: true }
+  );
 
   heroEl.addEventListener('mouseleave', () => {
     if (heroContentEl) heroContentEl.style.transform = '';
@@ -150,18 +175,20 @@ if (cursorDot && cursorRing && window.matchMedia('(hover: hover) and (pointer: f
   let targetX = ringX;
   let targetY = ringY;
 
-  document.addEventListener('mousemove', (event) => {
-    targetX = event.clientX;
-    targetY = event.clientY;
-    cursorDot.style.left = `${targetX}px`;
-    cursorDot.style.top = `${targetY}px`;
-  });
+  document.addEventListener(
+    'mousemove',
+    (event) => {
+      targetX = event.clientX;
+      targetY = event.clientY;
+      cursorDot.style.transform = `translate3d(${targetX}px, ${targetY}px, 0) translate(-50%, -50%)`;
+    },
+    { passive: true }
+  );
 
   const animateRing = () => {
     ringX += (targetX - ringX) * 0.18;
     ringY += (targetY - ringY) * 0.18;
-    cursorRing.style.left = `${ringX}px`;
-    cursorRing.style.top = `${ringY}px`;
+    cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
     requestAnimationFrame(animateRing);
   };
   requestAnimationFrame(animateRing);
