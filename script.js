@@ -92,15 +92,15 @@ counters.forEach((counter) => counterObserver.observe(counter));
 // Floating hero particles
 const particleField = document.getElementById('heroParticles');
 if (particleField) {
-  const particleCount = window.innerWidth < 720 ? 55 : 110;
+  const particleCount = window.innerWidth < 720 ? 90 : 180;
   for (let i = 0; i < particleCount; i += 1) {
     const particle = document.createElement('span');
     particle.className = 'hero-particle';
-    const size = 1.5 + Math.random() * 3;
+    const size = 2 + Math.random() * 4;
     particle.style.setProperty('--size', `${size}px`);
-    particle.style.setProperty('--duration', `${5 + Math.random() * 6}s`);
-    particle.style.setProperty('--delay', `${Math.random() * 6}s`);
-    particle.style.setProperty('--drift', `${Math.random() * 80 - 40}px`);
+    particle.style.setProperty('--duration', `${3 + Math.random() * 4}s`);
+    particle.style.setProperty('--delay', `${Math.random() * 4}s`);
+    particle.style.setProperty('--drift', `${Math.random() * 100 - 50}px`);
     particle.style.left = `${Math.random() * 100}%`;
     particleField.appendChild(particle);
   }
